@@ -1,5 +1,37 @@
+/* Ensure the body and html take up the full screen */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* Give the map absolute positioning to fill the window */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 0; /* Keep it behind the buttons */
+}
+
+/* Ensure buttons stay on top of the map */
+.filter-container {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* View Badge for the Popups */
 .view-badge {
-  background: #ff0050; /* TikTok Pink */
+  background: #ff0050;
   color: white;
   padding: 4px 10px;
   border-radius: 20px;
@@ -8,16 +40,3 @@
   margin: 6px 0;
   display: inline-block;
 }
-
-.popup-cuisine {
-  font-size: 13px;
-  color: #666;
-  font-weight: 500;
-}
-
-/* Category-specific filter button colors when active */
-.filter-btn[data-category="asian"].active { background: #9b5de5; color: white; }
-.filter-btn[data-category="wings"].active { background: #e63946; color: white; }
-.filter-btn[data-category="hotdog"].active { background: #2a9d8f; color: white; }
-.filter-btn[data-category="bakery"].active { background: #1d3557; color: white; }
-.filter-btn[data-category="caribbean"].active { background: #f4a261; color: white; }
