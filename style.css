@@ -1,0 +1,23 @@
+.view-badge {
+  background: #ff0050; /* TikTok Pink */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 6px 0;
+  display: inline-block;
+}
+
+.popup-cuisine {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Category-specific filter button colors when active */
+.filter-btn[data-category="asian"].active { background: #9b5de5; color: white; }
+.filter-btn[data-category="wings"].active { background: #e63946; color: white; }
+.filter-btn[data-category="hotdog"].active { background: #2a9d8f; color: white; }
+.filter-btn[data-category="bakery"].active { background: #1d3557; color: white; }
+.filter-btn[data-category="caribbean"].active { background: #f4a261; color: white; }
