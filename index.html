@@ -1,181 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>NYC Restaurant Week</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta charset="utf-8">
+<title>NYC Restaurant Week Map</title>
 
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<!-- Mapbox -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
+<!-- FILTER BUTTONS -->
 <div class="filter-container">
-  <button class="filter-btn active" data-category="all" onclick="setFilter('all', this)">All</button>
-  <button class="filter-btn" data-category="asian" onclick="setFilter('asian', this)">Asian/Ramen</button>
-  <button class="filter-btn" data-category="wings" onclick="setFilter('wings', this)">Wings</button>
-  <button class="filter-btn" data-category="hotdog" onclick="setFilter('hotdog', this)">Hot Dogs</button>
-  <button class="filter-btn" data-category="bakery" onclick="setFilter('bakery', this)">Bakery</button>
-  <button class="filter-btn" data-category="caribbean" onclick="setFilter('caribbean', this)">Caribbean</button>
+  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+  <button class="filter-btn" onclick="setFilter('wings', this)">Wings</button>
+  <button class="filter-btn" onclick="setFilter('mexican', this)">Mexican</button>
+  <button class="filter-btn" onclick="setFilter('comfort', this)">Comfort</button>
 </div>
 
+<!-- MAP -->
 <div id="map"></div>
 
-<script>
-mapboxgl.accessToken = 'pk.eyJ1IjoicGphaW42ODAxIiwiYSI6ImNtbDA3cHZ4bDBhNXkzbHEyMjE5ODR1azUifQ.zkm5kg40QRzCBkbFqr6ZnA';
-
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/dark-v11',
-  center: [-73.98, 40.73],
-  zoom: 11
-});
-
-/* ✅ Data aggregated from your JSON files */
-const restaurantData = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Pho Grand",
-        "cuisine": "Vietnamese",
-        "views": 5054459,
-        "location": "277C Grand St, NY 10002",
-        "category": "asian",
-        "image": "https://p16-common-sign.tiktokcdn.com/tos-maliva-avt-0068/42db4340b1014dd0dd00ec4c5971e476~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9918, 40.7176] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Naruto Ramen",
-        "cuisine": "Ramen",
-        "views": 4248399,
-        "location": "1596 3rd Ave, NY 10128",
-        "category": "asian",
-        "image": "https://p16-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/7334945299141984299~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9500, 40.7780] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Atomic Wings",
-        "cuisine": "Wings",
-        "views": 2333511,
-        "location": "1227 Fulton St, Brooklyn, NY 11216",
-        "category": "wings",
-        "image": "https://p16-common-sign.tiktokcdn-eu.com/tos-maliva-avt-0068/7b0a7accb3489a49cf7400f2d9bd965a~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9497, 40.6802] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Gray's Papaya",
-        "cuisine": "Hot Dogs",
-        "views": 1466290,
-        "location": "2090 Broadway, NY 10023",
-        "category": "hotdog",
-        "image": "https://p19-common-sign.tiktokcdn-us.com/tos-useast5-avt-0068-tx/0658f348c208e2a80eeece442fbf36a1~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9815, 40.7816] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Mah-Ze-Dahr Bakery",
-        "cuisine": "Bakery",
-        "views": 800266,
-        "location": "28 Greenwich Ave, NY 10011",
-        "category": "bakery",
-        "image": "https://p16-common-sign.tiktokcdn-us.com/tos-useast8-avt-0068-tx2/8efd7468dca66e3b51ec165d201a0dce~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9995, 40.7351] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "title": "Errol's Caribbean",
-        "cuisine": "Caribbean",
-        "views": 646229,
-        "location": "661 Flatbush Ave, Brooklyn, NY 11225",
-        "category": "caribbean",
-        "image": "https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/d7868f3a2f3c6996fcac5c175e592ed6~tplv-tiktokx-cropcenter:720:720.jpeg"
-      },
-      "geometry": { "type": "Point", "coordinates": [-73.9610, 40.6558] }
-    }
-  ]
-};
-
-map.on('load', () => {
-  map.addSource('restaurants', { type: 'geojson', data: restaurantData });
-
-  map.addLayer({
-    id: 'restaurant-points',
-    type: 'circle',
-    source: 'restaurants',
-    paint: {
-      /* 🔥 HEAT MAP: Circle radius is determined by views */
-      'circle-radius': [
-        'interpolate', ['linear'], ['get', 'views'],
-        0, 10,
-        500000, 15,
-        2000000, 30,
-        5000000, 55
-      ],
-      'circle-color': [
-        'match', ['get', 'category'],
-        'asian', '#9b5de5',
-        'wings', '#e63946',
-        'hotdog', '#2a9d8f',
-        'bakery', '#1d3557',
-        'caribbean', '#f4a261',
-        '#888'
-      ],
-      'circle-opacity': 0.8,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': '#ffffff'
-    }
-  });
-
-  map.on('click', 'restaurant-points', (e) => {
-    const props = e.features[0].properties;
-    const coords = e.features[0].geometry.coordinates.slice();
-
-    new mapboxgl.Popup()
-      .setLngLat(coords)
-      .setHTML(`
-        <div class="popup-wrapper vertical">
-          <div class="popup-container">
-            <img class="popup-image" src="${props.image}">
-            <div class="popup-text">
-              <div class="popup-title">${props.title}</div>
-              <div class="popup-cuisine">${props.cuisine}</div>
-              <div class="view-badge">🔥 ${props.views.toLocaleString()} Views</div>
-              <div class="popup-location">${props.location}</div>
-            </div>
-          </div>
-        </div>
-      `)
-      .addTo(map);
-  });
-});
-
-function setFilter(category, btn) {
-  if (category === 'all') {
-    map.setFilter('restaurant-points', null);
-  } else {
-    map.setFilter('restaurant-points', ['==', ['get', 'category'], category]);
-  }
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
