@@ -1,68 +1,1040 @@
+/* =========================
+   GLOBAL
+========================= */
+html,
 body {
-margin: 0;
-padding: 0;
-font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  touch-action: manipulation;
+  background: #f5f5f5;
 }
 
+/* =========================
+   MAP
+========================= */
 #map {
-position: absolute;
-top: 0;
-bottom: 0;
-width: 100%;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
 }
 
-/* FILTERS */
-.filter-container {
-position: absolute;
-top: 10px;
-left: 10px;
-z-index: 1;
-background: white;
-padding: 10px;
-border-radius: 10px;
-display: flex;
-gap: 6px;
-flex-wrap: wrap;
+/* =========================
+   FILTER PANEL
+========================= */
+.filter-panel {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  z-index: 10;
+
+  width: 430px;
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: visible;
+
+  background: white;
+  padding: 30px;
+  border-radius: 26px;
+  box-shadow: 0 10px 34px rgba(0,0,0,0.2);
+  box-sizing: border-box;
 }
 
-.filter-btn {
-border: none;
-padding: 6px 10px;
-border-radius: 6px;
-cursor: pointer;
-background: #eee;
+.filter-panel h2 {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
 }
 
-.filter-btn.active {
-background: #333;
-color: white;
+.filter-panel p {
+  margin: 8px 0 22px;
+  font-size: 22px;
+  line-height: 1.35;
 }
 
-/* POPUP */
+.filter-panel label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.filter-panel select {
+  display: none !important;
+}
+
+.filter-panel > button {
+  width: 100%;
+  height: 64px;
+  margin-top: 22px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: none;
+  background: #0b00a8;
+  color: white;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* =========================
+   CUSTOM DROPDOWN
+========================= */
+.custom-dropdown {
+  width: 100%;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.custom-dropdown-trigger {
+  width: 100%;
+  height: 62px;
+  padding: 0 18px;
+
+  border: 1px solid #bbb;
+  border-radius: 14px;
+
+  background: white !important;
+  color: #111 !important;
+
+  font-size: 21px;
+  font-weight: 500;
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.custom-dropdown-trigger::after {
+  content: "▾";
+  font-size: 20px;
+  color: #444;
+}
+
+.custom-dropdown-menu {
+  display: none;
+  position: absolute;
+
+  top: calc(100% + 8px);
+  left: 0;
+
+  width: 100%;
+  max-height: 310px;
+  overflow-y: auto;
+
+  background: white;
+  border: 1px solid #bbb;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 26px rgba(0,0,0,0.2);
+  z-index: 999999;
+}
+
+.custom-dropdown.open .custom-dropdown-menu {
+  display: block;
+}
+
+.custom-dropdown-option {
+  padding: 16px 18px;
+  border-radius: 10px;
+
+  font-size: 20px;
+  font-weight: 500;
+  color: #111;
+
+  cursor: pointer;
+}
+
+.custom-dropdown-option:hover {
+  background: #f1f1f1;
+}
+
+.custom-dropdown-option.selected {
+  background: #0b00a8;
+  color: white;
+}
+
+/* =========================
+   RESTAURANT COUNT
+========================= */
+.restaurant-count {
+  margin-top: 18px;
+  font-size: 21px;
+  color: #222;
+}
+
+.restaurant-count span {
+  color: #0b00a8;
+  font-weight: 800;
+}
+
+/* =========================
+   LEGEND
+========================= */
+.legend {
+  margin-top: 26px;
+}
+
+.legend h3 {
+  margin: 0 0 16px;
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.dot {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.dot.mexican { background: #2a9d8f; }
+.dot.italian { background: #5d6eeb; }
+.dot.middle-eastern { background: #e63946; }
+.dot.caribbean { background: #b83be9; }
+.dot.burgers { background: #8b4801; }
+.dot.indian { background: #0b00a8; }
+.dot.chinese { background: #bfff00; }
+.dot.american { background: #ff7700; }
+.dot.vietnamese { background: #650cd9; }
+.dot.southern { background: #1ac030; }
+.dot.australian { background: #02c9d0; }
+.dot.belgian { background: #c8aeff; }
+.dot.eastern-european { background: #ff5fdc; }
+.dot.colombian { background: #7b1616; }
+
+/* =========================
+   MAPBOX POPUP
+========================= */
 .mapboxgl-popup-content {
-border-radius: 12px;
-padding: 12px;
-max-width: 320px;
+  border-radius: 18px;
+  padding: 22px;
+  max-width: 440px;
 }
 
 .popup-title {
-font-weight: bold;
-font-size: 16px;
-margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 8px;
 }
 
 .popup-location {
-font-size: 12px;
-color: gray;
-margin-bottom: 10px;
+  font-size: 17px;
+  color: gray;
+  margin-bottom: 12px;
 }
 
-/* TikTok cards */
-.tiktok-card {
-margin-bottom: 10px;
+.popup-category {
+  color: #0b00a8;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-.tiktok-meta {
-font-size: 12px;
-margin-top: 4px;
+.more-btn,
+.save-btn {
+  margin-top: 12px;
+  padding: 16px 18px;
+  border: none;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.more-btn {
+  background: black;
+}
+
+.more-btn:hover {
+  background: #333;
+}
+
+.save-btn {
+  background: #0b00a8;
+}
+
+.qr-box {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+/* =========================
+   VIDEO MODAL
+========================= */
+#videoModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  background: rgba(0,0,0,0.92);
+
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+#carouselWrapper {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  background: transparent;
+  position: relative;
+}
+
+#carousel {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0;
+  overflow: hidden;
+}
+
+.carousel-video {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+.open-tiktok {
+  display: none;
+}
+
+/* =========================
+   VIDEO FRAME + HEADER
+========================= */
+.video-frame {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 180px;
+}
+
+.video-header {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  right: 20px;
+  z-index: 999999;
+
+  min-height: 58px;
+  padding: 8px 12px 8px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  background: rgba(0,0,0,0.72);
+  color: white;
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+
+  animation: headerFadeIn 0.28s ease;
+}
+
+.video-info {
+  min-width: 0;
+  text-align: left;
+}
+
+.video-title {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.video-location {
+  display: none;
+}
+
+.video-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.video-views {
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.16);
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.video-close {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: rgba(255,255,255,0.2);
+  color: white;
+
+  font-size: 28px;
+  line-height: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.video-frame iframe {
+  width: min(86vw, calc((100vh - 120px) * 9 / 16));
+  height: min(calc(86vw * 16 / 9), calc(100vh - 120px));
+
+  border-radius: 24px;
+  background: black;
+  border: none;
+}
+
+@keyframes headerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   VIDEO ARROWS
+========================= */
+.nav-buttons {
+  position: absolute;
+  inset: 0;
+  z-index: 1002;
+  pointer-events: none;
+}
+
+.nav-buttons .prev {
+  position: absolute;
+  left: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-buttons .next {
+  position: absolute;
+  right: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-buttons button {
+  pointer-events: auto;
+
+  width: 78px;
+  height: 78px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: rgba(0,0,0,0.55);
+  color: white;
+
+  font-size: 34px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+  opacity: 0.78;
+}
+
+.nav-buttons button:hover {
+  background: rgba(0,0,0,0.85);
+  opacity: 1;
+}
+
+.nav-buttons button.disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Hide duplicate generated arrows/counters */
+#videoCounter,
+.video-counter,
+.counter,
+#swipeHint,
+#carousel .nav-buttons,
+.carousel-video .nav-buttons {
+  display: none !important;
+}
+
+/* =========================
+   ADD RESTAURANT BUTTON
+========================= */
+.fab {
+  position: fixed;
+  bottom: 34px;
+  right: 34px;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  width: auto;
+  height: 72px;
+  padding: 0 42px;
+  border-radius: 100px;
+
+  background: #0b00a8;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(11, 0, 168, 0.3);
+  transition: 0.25s ease;
+}
+
+.fab:hover {
+  transform: scale(1.04);
+  background: #1a0dab;
+}
+
+.fab svg {
+  flex-shrink: 0;
+}
+
+/* =========================
+   DARK MODE BUTTON
+========================= */
+.theme-toggle {
+  position: fixed;
+  top: 32px;
+  right: 32px;
+  z-index: 9999;
+
+  padding: 16px 24px;
+  border: none;
+  border-radius: 100px;
+
+  background: white;
+  color: #111;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.theme-toggle.dark {
+  background: #111;
+  color: white;
+}
+
+/* =========================
+   BACK TO INTRO BUTTON
+========================= */
+.back-intro-btn {
+  position: fixed;
+  top: 96px;
+  right: 32px;
+  z-index: 9999;
+
+  display: none;
+
+  background: white;
+  color: #111;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+/* =========================
+   INTRO SCREEN
+========================= */
+#introScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(135deg, #0b00a8, #ff0050);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: opacity 0.5s ease;
+}
+
+#introScreen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-card {
+  width: 82vw;
+  max-width: 980px;
+  padding: 80px 70px;
+
+  border-radius: 34px;
+
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.intro-card h1 {
+  margin: 0 0 24px;
+  font-size: 82px;
+  line-height: 1;
+}
+
+.intro-card p {
+  font-size: 31px;
+  line-height: 1.45;
+  margin-bottom: 36px;
+  color: #444;
+}
+
+.intro-card button {
+  margin-top: 24px;
+  padding: 22px 42px;
+  border: none;
+  border-radius: 999px;
+  background: #0b00a8;
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* =========================
+   VIRAL SIZE LEGEND
+========================= */
+.size-legend {
+  position: fixed;
+  right: 32px;
+  bottom: 130px;
+  z-index: 10;
+
+  width: 290px;
+  background: white;
+  padding: 24px;
+  border-radius: 24px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+}
+
+.size-legend h3 {
+  margin: 0 0 18px;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.size-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.size-row p {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.size-dot {
+  display: inline-block;
+  border-radius: 50%;
+  background: #0b00a8;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+.size-dot.small {
+  width: 18px;
+  height: 18px;
+}
+
+.size-dot.medium {
+  width: 34px;
+  height: 34px;
+}
+
+.size-dot.large {
+  width: 54px;
+  height: 54px;
+}
+
+.size-note {
+  margin-top: 12px;
+  font-size: 17px;
+  color: #555;
+}
+
+/* =========================
+   VIRAL SLIDER
+========================= */
+.viral-slider-card {
+  margin-top: 10px;
+  margin-bottom: 22px;
+  padding: 18px 20px;
+
+  background: white;
+  border: 1px solid #bbb;
+  border-radius: 16px;
+
+  color: #111;
+}
+
+.viral-slider-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#viralLevelLabel {
+  font-size: 21px;
+  font-weight: 600;
+}
+
+#viralLevelValue {
+  background: #0b00a8;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.slider-wrap {
+  position: relative;
+  padding-top: 8px;
+}
+
+#viralBubble {
+  display: none;
+}
+
+#viewsFilter {
+  display: block !important;
+  width: 100%;
+  height: 10px;
+
+  accent-color: #0b00a8;
+  cursor: pointer;
+}
+
+.viral-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+
+  font-size: 16px;
+  color: #555;
+}
+
+/* =========================
+   SOUND HINT
+========================= */
+.sound-hint {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 999999;
+
+  background: rgba(0,0,0,0.72);
+  color: white;
+
+  padding: 12px 18px;
+  border-radius: 999px;
+
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  opacity: 1;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.sound-hint.hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+@media (max-width: 600px) {
+  .filter-panel {
+    width: calc(100vw - 40px);
+    max-height: 62vh;
+    top: 15px;
+    left: 15px;
+    padding: 18px;
+  }
+
+  .filter-panel h2 {
+    font-size: 24px;
+  }
+
+  .filter-panel p,
+  .filter-panel label {
+    font-size: 15px;
+  }
+
+  .custom-dropdown-trigger {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .custom-dropdown-option {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .fab {
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    width: auto;
+    height: 54px;
+    font-size: 15px;
+  }
+
+  .theme-toggle {
+    top: 15px;
+    right: 15px;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .back-intro-btn {
+    top: 65px;
+    right: 15px;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .size-legend {
+    display: none;
+  }
+}
+
+/* =========================
+   13.5 x 24 TOUCHSCREEN / PORTRAIT KIOSK
+========================= */
+@media (orientation: portrait) and (min-width: 700px) {
+  .filter-panel {
+    width: 460px;
+    top: 34px;
+    left: 34px;
+    padding: 32px;
+    border-radius: 28px;
+  }
+
+  .filter-panel h2 {
+    font-size: 40px;
+  }
+
+  .filter-panel p {
+    font-size: 23px;
+  }
+
+  .filter-panel label {
+    font-size: 23px;
+  }
+
+  .custom-dropdown-trigger {
+    height: 66px;
+    font-size: 22px;
+  }
+
+  .custom-dropdown-option {
+    font-size: 21px;
+    padding: 17px 18px;
+  }
+
+  .video-frame iframe {
+    width: min(88vw, calc((100vh - 130px) * 9 / 16)) !important;
+    height: min(calc(88vw * 16 / 9), calc(100vh - 130px)) !important;
+    max-width: 88vw !important;
+    max-height: calc(100vh - 130px) !important;
+  }
+
+  .intro-card {
+    width: 82vw;
+    max-width: 1000px;
+  }
+}
+
+/* =========================
+   FIX TIKTOK SIZE FOR 13.5 x 24 TOUCHSCREEN
+   ADD THIS AT THE VERY BOTTOM
+========================= */
+
+#videoModal {
+  background: #111 !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#carouselWrapper,
+#carousel,
+.carousel-video {
+  width: 100vw !important;
+  height: 100vh !important;
+  background: #111 !important;
+  overflow: hidden !important;
+}
+
+.video-frame {
+  width: 100vw !important;
+  height: 100vh !important;
+  padding-top: 180px !important;
+
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+
+  overflow: hidden !important;
+  background: #111 !important;
+}
+
+/* This forces the TikTok embed to visually scale up */
+.video-frame iframe,
+.carousel-video iframe {
+  width: 430px !important;
+  height: 760px !important;
+
+  max-width: none !important;
+  max-height: none !important;
+
+  transform: scale(1.75) !important;
+  transform-origin: top center !important;
+
+  border: none !important;
+  border-radius: 22px !important;
+  background: black !important;
+}
+
+/* keep the top info readable */
+.video-header {
+  top: 180px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+
+  width: 720px !important;
+  max-width: calc(100vw - 80px) !important;
+
+  min-height: 62px !important;
+  padding: 10px 18px !important;
+  border-radius: 999px !important;
+}
+
+.video-title {
+  font-size: 22px !important;
+}
+
+.video-views {
+  font-size: 16px !important;
+  padding: 8px 14px !important;
+}
+
+.video-close {
+  width: 46px !important;
+  height: 46px !important;
+  font-size: 30px !important;
+}
+
+/* make arrows easier to tap */
+.nav-buttons .prev {
+  left: 30px !important;
+}
+
+.nav-buttons .next {
+  right: 30px !important;
+}
+
+.nav-buttons button {
+  width: 84px !important;
+  height: 84px !important;
+  font-size: 36px !important;
+}
+
+/* move dark mode buttons above video */
+.theme-toggle,
+.back-intro-btn {
+  z-index: 10000 !important;
 }

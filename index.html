@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>NYC Restaurant Week Map</title>
+<title>ViralEats NYC</title>
 
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 
@@ -15,17 +15,174 @@
 
 <body>
 
-<!-- FILTER BUTTONS -->
-<div class="filter-container">
-  <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
-  <button class="filter-btn" onclick="setFilter('wings', this)">Wings</button>
-  <button class="filter-btn" onclick="setFilter('mexican', this)">Mexican</button>
-  <button class="filter-btn" onclick="setFilter('comfort', this)">Comfort</button>
+<div id="introScreen">
+  <div class="intro-card">
+    <h1>ViralEats NYC</h1>
+    <p>Explore NYC Restaurant Week through TikTok-powered food spots, viral views, and cuisine filters.</p>
+    <button id="enterMapBtn">Enter Map →</button>
+  </div>
 </div>
+
+<!-- FILTER BUTTONS -->
+<div class="filter-panel">
+
+  <h2>ViralEats NYC</h2>
+  <p>NYC Restaurant Week 2026</p>
+
+  <!-- CUISINE FILTER -->
+  <label>Filter by Cuisine</label>
+  <select id="cuisineFilter" onchange="applyFilters()" size="1">
+    <option value="all">All Cuisines</option>
+    <option value="mexican">Mexican</option>
+    <option value="italian">Italian</option>
+    <option value="middle eastern">Middle Eastern</option>
+    <option value="caribbean">Caribbean</option>
+    <option value="burgers">Burgers</option>
+    <option value="belgian">Belgian</option>
+    <option value="japanese/sushi">Japanese/Sushi</option>
+    <option value="eastern european">Eastern European</option>
+    <option value="colombian">Colombian</option>
+    <option value="chinese">Chinese</option>
+    <option value="american (traditional)">American (Traditional)</option>
+    <option value="vietnamese">Vietnamese</option>
+    <option value="southern">Southern</option>
+    <option value="australian">Australian</option>
+  </select>
+
+  <!-- VIRAL FILTER -->
+ <label>Filter by Viral Level</label>
+
+<div class="viral-slider-card">
+  <div class="viral-slider-row">
+    <span id="viralLevelLabel">All Popularity</span>
+    <span id="viralLevelValue">All</span>
+  </div>
+
+  <div class="slider-wrap">
+    <div id="viralBubble">All</div>
+
+    <input
+      type="range"
+      id="viewsFilter"
+      min="0"
+      max="4"
+      value="0"
+      step="1"
+      oninput="updateViralSlider(); applyFilters();"
+    >
+  </div>
+
+  <div class="viral-slider-labels">
+    <span>All</span>
+    <span>Low</span>
+    <span>Trend</span>
+    <span>Viral</span>
+    <span>1M+</span>
+  </div>
+</div>
+
+ <!-- <div class="viral-slider-labels">
+    <span>All</span>
+    <span>Low</span>
+    <span>Trending</span>
+    <span>Viral</span>
+    <span>1M+</span>
+  </div>-->
+
+  <!-- RESET -->
+  <button onclick="resetFilters()">Reset Filters</button>
+
+  <!-- COUNT -->
+  <div class="restaurant-count">
+    Showing <span id="restaurantCount">0</span> restaurants
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+  <h3>Cuisine Color Guide</h3>
+
+  <div class="legend-row"><span class="dot mexican"></span>Mexican</div>
+  <div class="legend-row"><span class="dot italian"></span>Italian</div>
+  <div class="legend-row"><span class="dot middle-eastern"></span>Middle Eastern</div>
+  <div class="legend-row"><span class="dot caribbean"></span>Caribbean</div>
+  <div class="legend-row"><span class="dot burgers"></span>Burgers</div>
+  <div class="legend-row"><span class="dot indian"></span>Indian</div>
+  <div class="legend-row"><span class="dot chinese"></span>Chinese</div>
+  <div class="legend-row"><span class="dot american"></span>American</div>
+  <div class="legend-row"><span class="dot vietnamese"></span>Vietnamese</div>
+  <div class="legend-row"><span class="dot southern"></span>Southern</div>
+  <div class="legend-row"><span class="dot australian"></span>Australian</div>
+</div>
+
+</div>
+
+<!--viral sizes-->
+<div class="size-legend">
+  <h3>Viral Size Guide</h3>
+
+  <div class="size-row">
+    <span class="size-dot small"></span>
+    <p>Lower views</p>
+  </div>
+
+  <div class="size-row">
+    <span class="size-dot medium"></span>
+    <p>Trending</p>
+  </div>
+
+  <div class="size-row">
+    <span class="size-dot large"></span>
+    <p>Very viral</p>
+  </div>
+
+  <div class="size-note">
+    Bigger dots = more TikTok views
+  </div>
+</div>
+
+<!--Dar Mode Button-->
+<button id="themeToggle" class="theme-toggle" onclick="toggleMapTheme()">
+  🌙 Dark Mode
+</button>
+
+<button id="backIntroBtn" class="back-intro-btn">
+  ← Intro
+</button>
+
 
 <!-- MAP -->
 <div id="map"></div>
 
+<!-- ✅ MODAL (THIS WAS YOUR BUG BEFORE) -->
+<div id="videoModal" class="modal" onclick="closeModal(event)">
+
+  <div class="nav-buttons">
+    <button class="prev" onclick="prevVideo()">←</button>
+    <button class="next" onclick="nextVideo()">→</button>
+  </div>
+
+  <div id="carouselWrapper">
+    <div id="carousel"></div>
+  </div>
+
+</div>
+
+<!-- add restaurant button -->
+
+<script async src="https://tally.so/widgets/embed.js"></script>
+<button 
+  data-tally-open="yP0oqd" 
+  class="fab">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+    </svg>
+    <span>Add Your Restaurant</span>
+</button>
+
+<!-- ✅ JS LOADS LAST -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="app.js"></script>
 
 </body>
