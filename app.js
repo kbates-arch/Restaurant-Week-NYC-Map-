@@ -638,13 +638,26 @@ function startIntroSlideshow() {
 
   if (!slides.length) return;
 
+  slides.forEach(slide => {
+    slide.classList.remove('active');
+  });
+
+  slides[0].classList.add('active');
+
   setInterval(() => {
-    slides[introSlideIndex].classList.remove('active');
+    const currentSlide = slides[introSlideIndex];
 
     introSlideIndex = (introSlideIndex + 1) % slides.length;
 
-    slides[introSlideIndex].classList.add('active');
-  }, 3500);
+    const nextSlide = slides[introSlideIndex];
+
+    nextSlide.classList.add('active');
+
+    setTimeout(() => {
+      currentSlide.classList.remove('active');
+    }, 1200);
+
+  }, 4000);
 }
 
 startIntroSlideshow();

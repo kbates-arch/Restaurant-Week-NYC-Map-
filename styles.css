@@ -639,6 +639,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
+  background: #0b00a8;
 }
 
 .intro-slide {
@@ -652,13 +653,14 @@ body {
   object-position: center;
 
   opacity: 0;
+  visibility: hidden;
 
   transition: opacity 1.2s ease-in-out;
 }
 
 .intro-slide.active {
   opacity: 1;
-  transform: scale(1);
+  visibility: visible;
 }
 
 .intro-overlay {
