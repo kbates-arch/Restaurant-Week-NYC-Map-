@@ -628,6 +628,26 @@ function showIntro() {
   intro.classList.remove('fade-out');
   backBtn.style.display = 'none';
 }
+// =========================
+// INTRO PHOTO SLIDESHOW
+// =========================
+let introSlideIndex = 0;
+
+function startIntroSlideshow() {
+  const slides = document.querySelectorAll('.intro-slide');
+
+  if (!slides.length) return;
+
+  setInterval(() => {
+    slides[introSlideIndex].classList.remove('active');
+
+    introSlideIndex = (introSlideIndex + 1) % slides.length;
+
+    slides[introSlideIndex].classList.add('active');
+  }, 3500);
+}
+
+startIntroSlideshow();
 
 document.getElementById('enterMapBtn').addEventListener('click', enterMap);
 document.getElementById('backIntroBtn').addEventListener('click', showIntro);
